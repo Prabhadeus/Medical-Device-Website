@@ -80,31 +80,42 @@ const Navbar = () => {
                 {/* mobile menu links */}
                 {menuOpen && (
                     <div className="md:hidden mt-2 space-y-2 px-2 pb-4">
-                        <a href="/"
-                           className="block px-4 py-2 rounded-full hover:shadow-md hover:scale-105 transition transform duration-150">
-                            Home
-                        </a>
-                        <a href="/tutorials"
-                           className="block px-4 py-2 rounded-full hover:shadow-md hover:scale-105 transition transform duration-150">
-                            Tutorials
-                        </a>
-                        <a href="/metadata"
-                           className="block px-4 py-2 rounded-full hover:shadow-md hover:scale-105 transition transform duration-150">
-                            Metadata
-                        </a>
-                        <a href="/about"
-                           className="block px-4 py-2 rounded-full hover:shadow-md hover:scale-105 transition transform duration-150">
-                            About
-                        </a>
-                        <div className="relative">
-                            <div className="absolute -top-2 right-1 w-3 h-3 rounded-full bg-white shadow"/>
-                            <a href="/contact"
+                        {menuItems.map((item, index) => {
+                            const isHovered = hoveredIndex === index;
+                            const isDimmed = hoveredIndex !== null && !isHovered;
 
-                               className="block px-4 py-2 rounded-full hover:shadow-md hover:scale-105 transition transform duration-150">
-                                Contact Us
-                            </a>
-                        </div>
-
+                            return (
+                                <div
+                                    key={item.name}
+                                    className={`w-fit relative group rounded-full transition duration-150 px-6 py-2 cursor-pointer flex items-center ${
+                                    isDimmed ? "opacity-50" : "opacity-100"
+                                    }`}
+                                    onMouseEnter={() => setHoveredIndex(index)}
+                                    onMouseLeave={() => setHoveredIndex(null)}
+                                >
+                                    {item.hasCircle && (
+                                        <div
+                                            className={`
+                                             absolute
+                                             top-1/2 left-1/2
+                                             w-24 h-8
+                                             rounded-full
+                                             bg-gray-300
+                                             opacity-70
+                                             -translate-x-1/2 -translate-y-1/2
+                                             pointer-events-none
+                                             mix-blend-screen
+                                             transition-all duration-300 ease-out
+                                             ${isHovered ? 'scale-110 opacity-90' : 'scale-95 opacity-0'}
+                                           `}
+                                        />
+                                    )}
+                                    <a href={item.href} className="relative z-10">
+                                        {item.name}
+                                    </a>
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
             </div>
