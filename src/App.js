@@ -1,14 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import Navbar from './components/Navbar.jsx';
+import HeroSection from "./components/HeroSection";
 
 function App() {
     return (
-        <div className="min-h-screen">
+        <div className="font-sans">
             <Navbar />
-            <main className="pt-16">
-                <div className="p-4">Welcome to MedEdu!</div>
-            </main>
+            <HeroSection />
         </div>
     );
 }

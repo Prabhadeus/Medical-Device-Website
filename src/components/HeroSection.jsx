@@ -1,43 +1,31 @@
-import React, { useEffect, useState, useRef} from "react";
-
-const imageFrames = [
-    '/images/device/frame0.png',
-    '/images/device/frame1.png',
-    '/images/device/frame2.png',
-    '/images/device/frame3.png',
-];
+import React, { useState } from "react";
+import ScrollVideo from "./ScrollVideo";
 
 const HeroSection = () => {
-    const [frameIndex, setFrameIndex] = useState(0);
-    const lastScrollY = useRef(0);
-
-    useEffect(() => {
-        const onScroll = () => {
-            const scrollY = window.scrollY;
-            const maxScroll = 500;
-            const scrollFraction = Math.min(scrollY / maxScroll, 1);
-            const frame = Math.floor(scrollFraction * (frames.length - 1));
-            setFrameIndex(frame);
-            lastScrollY.current = scrollY;
-        };
-
-        window.addEventListener('scroll', onScroll);
-
-        return () => window.removeEventListener('scroll', onScroll);
-    }, []);
+    const [scrollFraction, setScrollState] = useState(0);
+    const showText = scrollFraction > 0.7 && scrollFraction < 0.95;
+    const showPostVideoWhitespace = scrollFraction >= 1;
 
     return (
-        <section className="relative h-screen bg-blue-50 flex flex-col items-center justify-center text-center px-4">
-            <img
-                src={frames[frameIndex]}
-                alt="Medical device disassembly animation"
-                className="max-w-full max-h-[60vh] object-contain"
-                loading="lazy"
-            />
-            <h1 className="text-3xl font-bold mt-6 text-blue-900">Explore Medical Devices Like Never Before</h1>
-            <p className="mt-2 text-blue-700 max-w-xl">
-                Watch our interactive disassembly animation as you scroll down to see inside the device and learn about its hardware.
-            </p>
+        <section className="relative">
+            <ScrollVideo setScrollState={setScrollState} />
+
+            <div
+                className={`absolute transition-opacity duration-700 ease-in-out bottom-12 left-1/2 transform -translate-x-1/2 text-center text-[#7FD8DE] ${
+                    showText ? "opacity-100" : "opacity-0"
+                }`}
+            >
+                <h1 className="text-4xl md:text-5xl font-bold">
+                    Explore Medical Devices Like Never Before
+                </h1>
+                <p className="text-lg mt-4 max-w-xl mx-auto">
+                    Scroll to see hardware components, CAD/FEA tutorials, and metadata in one place.
+                </p>
+            </div>
+
+            {showPostVideoWhitespace && (
+                <div style={{ height: "150vh" }} className="bg-white w-full" />
+            )}
         </section>
     );
 };
