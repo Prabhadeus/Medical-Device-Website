@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const Navbar = () => {
+const Navbar = ({ currentMode }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const [scrolled, setScrolled] = useState(false);
@@ -26,9 +26,9 @@ const Navbar = () => {
     return (
         <nav
             className={`w-full fixed top-0 left-0 z-50 transition-colors duration-300 ease-in-out ${
-                scrolled
-                    ? "bg-[#134E6F] text-white shadow-md"
-                    : "bg-transparent text-[#f5f5f5]"
+                currentMode === "video"
+                    ? "bg-transparent text-white"
+                    : "bg-black/40 text-white"
             }`}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -111,13 +111,15 @@ const Navbar = () => {
                 {/* mobile menu links */}
                 <div
                     className={`
-                        md:hidden fixed top-16 left-0 w-full z-40 text-white
+                        md:hidden fixed top-16 left-0 w-full z-40
+                        backdrop-blur-md bg-white/10
                         ${menuOpen
-                        ? "bg-[#134E6F] opacity-100 scale-y-100 pointer-events-auto"
-                        : "bg-transparent opacity-0 scale-y-0 pointer-events-none"}
+                        ? "opacity-100 scale-y-100 pointer-events-auto"
+                        : "opacity-0 scale-y-0 pointer-events-none"}
                         transition-all duration-300 ease-in-out transform origin-top
-                    `}
+                      `}
                 >
+
                     {menuItems.map((item, index) => {
                         const isHovered = hoveredIndex === index;
                         const isDimmed = hoveredIndex !== null && !isHovered;
