@@ -1,45 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import clsx from "clsx";
+import PulseLine from "./PulseLine";
+import MedicalCrossIcon from "./MedicalCrossIcon";
+import CloseIcon from "./CloseIcon";
+import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar = ({ currentMode }) => {
+const Navbar = ({ show }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [hoveredIndex, setHoveredIndex] = useState(null);
-    const [scrolled, setScrolled] = useState(false);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const triggerPoint = window.innerHeight * 3.2; // beyond ScrollImageSequence height
-            setScrolled(window.scrollY > triggerPoint);
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    const pulseWidth = 100;
 
     const menuItems = [
         { name: "Home", href: "/" },
         { name: "Tutorials", href: "/tutorials" },
         { name: "Metadata", href: "/metadata" },
         { name: "About", href: "/about" },
-        { name: "Contact Us", href: "/contact", hasCircle: true },
+        { name: "Contact Us", href: "/contact" },
     ];
+
+    const mobileMenuVariants = {
+        hidden: { opacity: 0, scaleY: 0, originY: 0 },
+        visible: { opacity: 1, scaleY: 1, originY: 0, transition: { duration: 0.3 } },
+    };
 
     return (
         <nav
-            className={`w-full fixed top-0 left-0 z-50 transition-colors duration-300 ease-in-out ${
-                currentMode === "video"
-                    ? "bg-transparent text-white"
-                    : "bg-black/40 text-white"
-            }`}
+            id="main-navbar"
+            className={clsx(
+                "absolute top-0 left-0 w-full z-40 transition-all duration-700 ease-in-out",
+                show
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : "opacity-0 -translate-y-10 pointer-events-none"
+            )}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
-
-                    {/* logo */}
-                    <div className="text-xl font-bold cursor-pointer select-none">
+                    <div className="text-xl font-bold cursor-pointer select-none text-white">
                         MedEdu
                     </div>
 
-                    {/* desktop menu */}
+                    {/* Desktop Menu */}
                     <div className="hidden md:flex space-x-4">
                         {menuItems.map((item, index) => {
                             const isHovered = hoveredIndex === index;
@@ -48,113 +49,89 @@ const Navbar = ({ currentMode }) => {
                             return (
                                 <div
                                     key={item.name}
-                                    className={`relative group rounded-full transition duration-150 px-6 py-2 cursor-pointer flex items-center ${
+                                    className={clsx(
+                                        "relative group rounded-full px-6 py-2 cursor-pointer flex items-center justify-center",
                                         isDimmed ? "opacity-50" : "opacity-100"
-                                    }`}
+                                    )}
                                     onMouseEnter={() => setHoveredIndex(index)}
                                     onMouseLeave={() => setHoveredIndex(null)}
                                 >
-                                    {item.hasCircle && (
+                                    <span className="relative z-10 select-none text-white">
+                                        <a href={item.href}>{item.name}</a>
+                                    </span>
+
+                                    {isHovered && (
                                         <div
-                                            className={`
-                                                absolute
-                                                top-1/2 left-1/2
-                                                w-24 h-8
-                                                rounded-full
-                                                bg-[#8FB6D6]
-                                                -translate-x-1/2 -translate-y-1/2
-                                                pointer-events-none
-                                                transition-transform transition-opacity duration-300 ease-out
-                                                ${isHovered ? "opacity-70 scale-110" : "opacity-0 scale-95"}
-                                            `}
-                                        />
+                                            className="absolute bottom-[-10px] left-1/2 -translate-x-1/2 h-[20px] pointer-events-none"
+                                            style={{ width: pulseWidth }}
+                                        >
+                                            <PulseLine width={pulseWidth} key={index} />
+                                        </div>
                                     )}
-                                    <a href={item.href} className="relative z-10">
-                                        {item.name}
-                                    </a>
                                 </div>
                             );
                         })}
                     </div>
 
-                    {/* mobile menu button */}
+                    {/* Mobile menu button */}
                     <div className="md:hidden">
                         <button
                             onClick={() => setMenuOpen(!menuOpen)}
                             aria-label="Toggle menu"
+                            className="transition-transform duration-200 ease-in-out active:scale-95 focus:outline-none"
                         >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                viewBox="0 0 24 24"
-                            >
-                                {menuOpen ? (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                ) : (
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                )}
-                            </svg>
+                            {menuOpen ? (
+                                <CloseIcon size={24} color="white" />
+                            ) : (
+                                <MedicalCrossIcon size={24} color="white" />
+                            )}
                         </button>
                     </div>
                 </div>
 
-                {/* mobile menu links */}
-                <div
-                    className={`
-                        md:hidden fixed top-16 left-0 w-full z-40
-                        backdrop-blur-md bg-white/10
-                        ${menuOpen
-                        ? "opacity-100 scale-y-100 pointer-events-auto"
-                        : "opacity-0 scale-y-0 pointer-events-none"}
-                        transition-all duration-300 ease-in-out transform origin-top
-                      `}
-                >
+                {/* Mobile Menu */}
+                <AnimatePresence>
+                    {menuOpen && (
+                        <motion.div
+                            initial="hidden"
+                            animate="visible"
+                            exit="hidden"
+                            variants={mobileMenuVariants}
+                            className="md:hidden absolute top-16 left-0 w-full z-30 bg-black/50 backdrop-blur-md origin-top"
+                            style={{ paddingBottom: "1.25rem" }}
+                        >
+                            {menuItems.map((item, index) => {
+                                const isHovered = hoveredIndex === index;
+                                const isDimmed = hoveredIndex !== null && !isHovered;
 
-                    {menuItems.map((item, index) => {
-                        const isHovered = hoveredIndex === index;
-                        const isDimmed = hoveredIndex !== null && !isHovered;
-
-                        return (
-                            <div
-                                key={item.name}
-                                className={`w-fit relative group rounded-full transition duration-150 px-6 py-2 cursor-pointer flex items-center ${
-                                    isDimmed ? "opacity-50" : "opacity-100"
-                                }`}
-                                onMouseEnter={() => setHoveredIndex(index)}
-                                onMouseLeave={() => setHoveredIndex(null)}
-                            >
-                                {item.hasCircle && (
+                                return (
                                     <div
-                                        className={`
-                                            absolute
-                                            top-1/2 left-1/2
-                                            w-24 h-8
-                                            rounded-full
-                                            bg-[#8FB6D6]
-                                            -translate-x-1/2 -translate-y-1/2
-                                            pointer-events-none
-                                            transition-transform transition-opacity duration-300 ease-out
-                                            ${isHovered ? "opacity-70 scale-110" : "opacity-0 scale-95"}
-                                        `}
-                                    />
-                                )}
-                                <a href={item.href} className="relative z-10">
-                                    {item.name}
-                                </a>
-                            </div>
-                        );
-                    })}
-                </div>
+                                        key={item.name}
+                                        className={clsx(
+                                            "w-fit relative group rounded-full px-6 py-2 cursor-pointer flex items-center justify-center text-white",
+                                            isDimmed ? "opacity-50" : "opacity-100"
+                                        )}
+                                        onMouseEnter={() => setHoveredIndex(index)}
+                                        onMouseLeave={() => setHoveredIndex(null)}
+                                    >
+                                        <span className="relative z-10 select-none">
+                                            <a href={item.href}>{item.name}</a>
+                                        </span>
+
+                                        {isHovered && (
+                                            <div
+                                                className="absolute bottom-[-10px] left-0 h-[20px] pointer-events-none"
+                                                style={{ width: pulseWidth }}
+                                            >
+                                                <PulseLine width={pulseWidth} key={`mobile-${index}`} />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </nav>
     );

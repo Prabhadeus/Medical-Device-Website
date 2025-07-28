@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background-color: gray;
+html, body {
+    overflow-x: hidden;
 }
 
 @layer utilities {
@@ -11,106 +11,119 @@ body {
         @apply border border-white/20;
     }
 
-    .nav-hover-btn {
-        @apply relative ms-10 font-general text-xs uppercase text-blue-50 after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left hover:after:scale-x-100 dark:after:bg-white cursor-pointer;
-    }
-
-    .floating-nav {
-        @apply bg-black rounded-lg border;
-    }
-
     .absolute-center {
-        @apply absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%];
+        @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
     }
 
     .flex-center {
         @apply flex justify-center items-center;
     }
 
-    .mask-clip-path {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    @keyframes pulse-heartbeat {
+        0% {
+            stroke-dashoffset: 150;
+        }
+        50% {
+            stroke-dashoffset: 0;
+        }
+        100% {
+            stroke-dashoffset: 150;
+        }
     }
 
-    .special-font b {
-        font-family: "Zentry";
-        font-feature-settings: "ss01" on;
+    .pulse-animate {
+        animation: pulse-heartbeat 2s ease-in-out infinite;
     }
 
-    .hero-heading {
-        @apply uppercase font-zentry font-black text-5xl sm:right-10 sm:text-7xl md:text-9xl lg:text-[12rem];
+    @keyframes pulseSlow {
+        0%, 100% {
+            opacity: 0.3;
+        }
+        50% {
+            opacity: 0.6;
+        }
     }
 
-    .about-subtext {
-        @apply absolute bottom-[-80dvh] left-1/2 w-full max-w-96 -translate-x-1/2 text-center font-circular-web text-lg md:max-w-[34rem];
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
     }
 
-    .about-image {
-        @apply absolute left-1/2 top-0 z-20 h-[60vh] w-96 origin-center -translate-x-1/2 overflow-hidden rounded-3xl md:w-[30vw];
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
     }
 
-    .animated-title {
-        @apply flex flex-col gap-1 text-7xl uppercase leading-[.8] text-white sm:px-32 md:text-[6rem];
+    /* Heartbeat pulse animation for button background on hover */
+    @keyframes pulse-background {
+        0%, 100% {
+            filter: brightness(1);
+        }
+        50% {
+            filter: brightness(1.3);
+        }
     }
 
-    .animated-word {
-        @apply special-font font-zentry font-black opacity-0;
-        transform: translate3d(10px, 51px, -60px) rotateY(60deg) rotateX(-40deg);
-        transform-origin: 50% 50% -150px !important;
-        will-change: opacity, transform;
+    a.relative:hover {
+        animation: pulse-background 2s ease-in-out infinite;
     }
 
-    .bento-tilt_1 {
-        @apply relative border-hsla col-span-2 overflow-hidden rounded-md transition-transform duration-300 ease-out;
+    /* Pulse brightness animation for progress bar fill */
+    @keyframes pulse-bar {
+        0%, 100% {
+            filter: brightness(1);
+        }
+        50% {
+            filter: brightness(1.3);
+        }
     }
 
-    .bento-tilt_2 {
-        @apply relative col-span-1 row-span-1 overflow-hidden rounded-md transition-transform duration-300 ease-out;
+    .pulse-bar {
+        animation: pulse-bar 2s ease-in-out infinite;
     }
 
-    .bento-title {
-        @apply uppercase md:text-6xl text-4xl font-black font-zentry;
+    /* Visit Website button circuit fill slide-up */
+    a.inline-flex > span:first-child {
+        transition: transform 0.5s ease-in-out;
+        transform: translateY(100%);
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 0;
     }
-
-    .story-img-container {
-        @apply relative md:h-dvh h-[90vh] w-full;
-        filter: url("#flt_tag");
-    }
-
-    .story-img-mask {
-        @apply absolute left-0 top-0 size-full overflow-hidden md:left-[20%] md:top-[-10%] md:size-4/5;
-        clip-path: polygon(4% 0, 83% 21%, 100% 73%, 0% 100%);
-    }
-
-    .story-img-content {
-        @apply absolute w-full md:h-dvh h-[50dvh] opacity-100 left-10 top-16 md:left-0 md:top-10 lg:left-[-300px] lg:top-[-100px];
-        transform: translate3d(0, 0, 0) rotateX(0) rotateY(0) rotateZ(0) scale(1);
-    }
-
-    .gallery-img-container {
-        @apply size-64 overflow-hidden bg-violet-300;
-    }
-
-    .gallery-img {
-        @apply size-full bg-cover;
-    }
-
-    .gallery-img-4 {
-        @apply sm:size-80 md:h-96 md:w-[25rem] rounded-lg;
-    }
-
-    .sword-man-clip-path {
-        clip-path: polygon(16% 0, 89% 15%, 75% 100%, 0 97%);
-    }
-
-    .contact-clip-path-1 {
-        clip-path: polygon(25% 0%, 74% 0, 69% 64%, 34% 73%);
-    }
-
-    .contact-clip-path-2 {
-        clip-path: polygon(29% 15%, 85% 30%, 50% 100%, 10% 64%);
+    a.inline-flex:hover > span:first-child {
+        transform: translateY(0);
     }
 }
 
-.indicator-line {
-    @apply h-1 w-px rounded-full bg-white transition-all duration-200 ease-in-out;
+/* Circuity jagged clip-path */
+.clip-circuit {
+    clip-path: polygon(
+            0% 0%, 10% 0%, 10% 5%, 15% 5%, 15% 0%, 85% 0%, 85% 5%, 90% 5%, 90% 0%,
+            100% 0%, 100% 10%, 95% 10%, 95% 15%, 100% 15%, 100% 85%, 95% 85%, 95% 90%,
+            100% 90%, 100% 100%, 90% 100%, 90% 95%, 85% 95%, 85% 100%, 15% 100%,
+            15% 95%, 10% 95%, 10% 100%, 0% 100%, 0% 90%, 5% 90%, 5% 85%, 0% 85%,
+            0% 15%, 5% 15%, 5% 10%, 0% 10%
+    );
+}
+
+/* Circuit glow effect (dark blue) */
+@keyframes flicker {
+    0%, 100% {
+        box-shadow: 0 0 4px #007BFF66, 0 0 12px #007BFFAA;
+        border-color: #007BFF;
+    }
+    50% {
+        box-shadow: 0 0 8px #005FCC99, 0 0 16px #005FCC;
+        border-color: #005FCC;
+    }
+    75% {
+        box-shadow: 0 0 3px #339DFF77, 0 0 10px #339DFFAA;
+        border-color: #339DFF;
+    }
+}
+
+.flicker-glow {
+    animation: flicker 2.4s ease-in-out infinite;
 }

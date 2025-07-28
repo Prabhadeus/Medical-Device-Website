@@ -1,0 +1,197 @@
+.featured-section-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 320px;
+    padding: 3rem 0;
+    overflow: hidden;
+}
+
+.circuit-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('../public/images/pcb-texture.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.06;
+    z-index: 0;
+}
+
+.left-bg {
+    left: 0;
+}
+
+.right-bg {
+    right: 0;
+}
+
+.content-wrapper {
+    z-index: 10;
+    position: relative;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.pcb-chip {
+    position: absolute;
+    top: 50%;
+    width: 80px;
+    height: 80px;
+    border: 2px solid #22c55e;
+    border-radius: 12px;
+    z-index: 5;
+    box-shadow: 0 0 15px #22c55e;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pcb-chip-left {
+    left: 5%;
+}
+
+.pcb-chip-right {
+    right: 5%;
+}
+
+.circuit-line {
+    stroke: #22c55e;
+    stroke-width: 3;
+    fill: none;
+    stroke-linecap: round;
+    stroke-dasharray: 12 8;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.circuit-line.animate {
+    opacity: 1;
+    animation: pulseCircuit 1.5s infinite linear;
+}
+
+@keyframes pulseCircuit {
+    0% {
+        stroke-dashoffset: 1000;
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+
+.tutorial-card {
+    position: relative;
+    width: 320px;
+    background: #f0f9ff;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.tutorial-hover-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+}
+
+.tutorial-hover-overlay.opacity-100 {
+    opacity: 1;
+}
+
+/* New styles for the circuit box behind the cards */
+
+.circuit-box {
+    position: absolute;
+    top: 50%;
+    width: 300px;
+    height: 320px;
+    background: url('../public/images/pcb-texture.png') no-repeat center/cover;
+    border: 2px solid #22c55e;
+    border-radius: 16px;
+    box-shadow: 0 0 25px #22c55e44;
+    transform: translateY(-50%);
+    user-select: none;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.circuit-box-right {
+    right: -100px;
+}
+
+.circuit-box-left {
+    left: -100px;
+}
+
+.circuit-box-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 16px;
+    pointer-events: none;
+    user-select: none;
+    display: block;
+}
+
+.circuit-lines-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 3;
+}
+
+/* ====== BUTTON with animated green fill from bottom ====== */
+
+.custom-button {
+    position: relative;
+    display: inline-block;
+    padding: 0.75rem 2rem;
+    border: 2px solid #22c55e;
+    color: #22c55e;
+    background: transparent;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 0;
+    transition: color 0.3s ease;
+    font-weight: 600;
+    border-radius: 0.375rem;
+}
+
+.custom-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    z-index: -1;
+    transition: height 0.4s ease;
+    border-radius: 0.375rem;
+}
+
+.custom-button:hover {
+    color: white;
+}
+
+.custom-button:hover::before {
+    height: 100%;
+}
